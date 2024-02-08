@@ -6,8 +6,8 @@ const asyncHandler = require("express-async-handler");
 // @route POST /api/users
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
+  const { firstname, email, password } = req.body;
+  if (!firstname || !email || !password) {
     res.status(400);
     throw new Error("Please add all fields");
   }
@@ -28,17 +28,16 @@ const registerUser = asyncHandler(async (req, res) => {
   // create user
 
   const user = await User.create({
-    name,
+    firstname,
     email,
     password: hashedPassword,
-    role: "pleb",
   });
 
   if (user) {
     res.status(201).json({
       // sukuria json objekta, kuris yra siunciamas response i client
       _id: user.id,
-      name: user.name,
+      firstname: user.firstname,
       email: user.email,
       token: generateToken(user._id),
       role: user.role,
@@ -69,11 +68,10 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       _id: user.id,
-      name: user.name,
+      firstname: user.firstname,
       email: user.email,
       // svarbiausia, kad sugriztu token, kuris sukuriamas backende
       token: generateToken(user._id),
-      role: user.role,
     });
   } else {
     res.status(400);

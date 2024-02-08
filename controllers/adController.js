@@ -2,7 +2,9 @@ const asyncHandler = require("express-async-handler");
 
 const Ad = require("../models/Ad");
 
-// @route POST /api/ads
+//@desc Set ads
+//@route POST /api/ads
+//@access private
 
 const setAd = asyncHandler(async (req, res) => {
   if (!req.body.text || !req.body.description || !req.body.price) {
@@ -19,4 +21,51 @@ const setAd = asyncHandler(async (req, res) => {
   res.status(200).json(ad);
 });
 
-module.exports = setAd;
+//@desc get ads
+//@route GET /api/ads
+//@access private
+
+const getAds = asyncHandler(async (req, res) => {
+  const ads = await Ad.find({ user: req.user.id });
+  res.status(200).json(ads);
+});
+
+// @desc Update ad
+// @route PUT /api/ads/:id
+// @access private
+
+const updateAd = asyncHandler(async (req, res) => {
+  const ad = await Ad.findById(req.params.id);
+
+  if (!ad) {
+    res.status(400);
+    throw new Error("Ad not found");
+  }
+
+  // check for user
+  if (!req.user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  // make sure the logged in user matches the ad user
+  if (ad.user.toString() !== req.user.id && req.user.role !== "admin") {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  // make sure the logged in user matches the ads user
+  if (req.user.role === "admin" || ad.user.toString() === req.user.id) {
+    // response turi grazinti atnaujinta skelbima
+    const updateAd = await Ad.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).json(updateAd);
+  }
+});
+
+module.exports = {
+  setAd,
+  getAds,
+  updateAd,
+};

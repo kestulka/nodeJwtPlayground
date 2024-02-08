@@ -3,9 +3,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { setAd } = require("../controllers/adController");
+const { setAd, getAds, updateAd } = require("../controllers/adController");
 const { protect } = require("../middleware/auth");
 
-router.route("/").post(protect, setAd);
+router.route("/").post(protect, setAd).get(protect, getAds);
+router.route("/:id").put(protect, updateAd);
 
 module.exports = router;
