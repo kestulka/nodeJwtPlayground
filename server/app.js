@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const connectToDB = require("./server/config/db.js");
+const connectToDB = require("./config/db.js");
 const cors = require("cors");
-const errorHandler = require("./server/middleware/errorHandler.js");
+const errorHandler = require("./middleware/errorHandler.js");
 
 connectToDB();
 
@@ -12,8 +12,8 @@ app.use(cors());
 app.options("*", cors());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api/users", require("./server/routes/userRoutes.js"));
-app.use("/api/ads", require("./server/routes/adRoutes.js"));
+app.use("/api/users", require("./routes/userRoutes.js"));
+app.use("/api/ads", require("./routes/adRoutes.js"));
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>
