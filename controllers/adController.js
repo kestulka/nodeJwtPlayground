@@ -64,8 +64,38 @@ const updateAd = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Delete ad
+// @route DELETE /api/ads/:id
+// @access private
+
+const deleteAd = asyncHandler(async (req, res) => {
+  const ad = await Ad.findById(req.params.id);
+
+  if (!ad) {
+    res.status(400);
+    throw new Error("Ad not found");
+  }
+
+  // check for user
+  if (!req.user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  // make sure the logged in user matches the ad user
+  if (ad.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  await Ad.findByIdAndDelete(req.params.id);
+
+  res.status(200).json({ id: req.params.id });
+});
+
 module.exports = {
   setAd,
   getAds,
   updateAd,
+  deleteAd,
 };

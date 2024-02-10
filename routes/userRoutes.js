@@ -1,8 +1,21 @@
 const express = require("express");
+
 const router = express.Router();
-const { registerUser, loginUser } = require("../controllers/userController");
+
+const {
+  registerUser,
+  loginUser,
+  getUser,
+  getUsers,
+} = require("../controllers/userController");
+
+const protect = require("../middleware/auth"); // kodel cia "protect" reikia deti i skliaustus?
+
+const protectAdmin = require("../middleware/adminAuth");
 
 router.post("/", registerUser);
 router.post("/login", loginUser);
+router.get("/user", protect, getUser);
+router.get("/list", protectAdmin, getUsers);
 
 module.exports = router;

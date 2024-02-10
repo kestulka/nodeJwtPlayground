@@ -79,4 +79,46 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, loginUser };
+// @desc get user data
+// @route GET /api/users/user
+// @access private
+
+const getUser = asyncHandler(async (req, res) => {
+  res.status(200).json(req.user);
+});
+
+// @desc get users data
+// @route GET /api/users/list
+// @access private
+
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.aggregate([
+    {
+      $lookup: {
+        from: "ads",
+        localField: "_id",
+        foreignField: "user",
+        as: "ads",
+      },
+    },
+    {
+      $match: { role: { $in: ["simple", "admin"] } }, // rodys visus userius ir simple ir admin
+    },
+    {
+      // cia bus isvardinami dalykai, kuriu nereikia, kad rodytu kai pagetina userius
+      $unset: [
+        "password",
+        "createdAt",
+        "updatedAt",
+        "goals.createdAt",
+        "ads.updatedAt",
+        "ads.__v",
+        "__v",
+      ],
+    },
+  ]);
+
+  res.status(200).json(users);
+});
+
+module.exports = { registerUser, loginUser, getUser, getUsers };
