@@ -9,7 +9,7 @@ const {
   getUsers,
 } = require("../controllers/userController");
 
-const protect = require("../middleware/auth"); // kodel cia "protect" reikia deti i skliaustus?
+const protect = require("../middleware/auth");
 
 const protectAdmin = require("../middleware/adminAuth");
 
