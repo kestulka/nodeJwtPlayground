@@ -121,4 +121,50 @@ const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json(users);
 });
 
-module.exports = { registerUser, loginUser, getUser, getUsers };
+// EJS
+
+const homepage = async (req, res) => {
+  const locals = {
+    title: "Skelbimukai",
+    description: "Management system",
+  };
+  res.render("index", locals);
+};
+
+// New customer form
+
+const addUser = async (req, res) => {
+  const locals = {
+    title: "Skelbimukai",
+    description: "Management system",
+  };
+
+  res.render("add", locals);
+};
+
+// create new user in form
+
+const postUser = async (req, res) => {
+  const newUser = new User({
+    firstname: req.body.firstname,
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  try {
+    await User.create(newUser);
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getUser,
+  getUsers,
+  homepage,
+  addUser,
+  postUser,
+};

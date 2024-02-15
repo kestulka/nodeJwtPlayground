@@ -27,24 +27,16 @@ app.use(expressLayout);
 app.set("layout", "./main"); // pathas i main ejs faila
 app.set("view engine", "ejs");
 
-// Home page
-
-app.get("/", (req, res) => {
-  const locals = {
-    title: "Skelbimukai",
-    description: "Management system",
-  };
-
-  res.render("index", locals);
-});
-
 // Routes
+
+app.use("/", require("./routes/userRoutes.js"));
 
 // Handle 404
 app.get("*", (req, res) => {
   res.status(404).render("404");
 });
 
+// ensure that server is running
 app.listen(process.env.PORT, () =>
   console.log(`Server is running on port ${process.env.PORT}`),
 );
