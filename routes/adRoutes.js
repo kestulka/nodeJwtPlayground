@@ -11,7 +11,7 @@ const {
 } = require("../controllers/adController");
 const protect = require("../middleware/auth");
 
-router.route("/").post(protect, setAd).get(protect, getAds);
-router.route("/:id").put(protect, updateAd).delete(protect, deleteAd);
+router.route("/add/ad").post(protect, setAd).get(protect, getAds);
+router.route("/add/ad/:id").put(protect, updateAd).delete(protect, deleteAd);
 
 module.exports = router;
