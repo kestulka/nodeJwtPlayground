@@ -8,10 +8,17 @@ const {
   getAds,
   updateAd,
   deleteAd,
+  homepage,
+  addAd,
+  postAd,
 } = require("../controllers/adController");
 const protect = require("../middleware/auth");
 
-router.route("/add/ad").post(protect, setAd).get(protect, getAds);
-router.route("/add/ad/:id").put(protect, updateAd).delete(protect, deleteAd);
+// router.route("/add/ad").post(protect, setAd).get(protect, getAds);
+// router.route("/add/ad/:id").put(protect, updateAd).delete(protect, deleteAd);
+
+router.get("/", homepage);
+router.get("/add/ad", addAd);
+router.post("/add/ad", postAd);
 
 module.exports = router;

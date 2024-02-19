@@ -93,9 +93,51 @@ const deleteAd = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+// EJS
+
+const homepage = async (req, res) => {
+  const locals = {
+    title: "Skelbimukai",
+    description: "Management system",
+  };
+  res.render("index", locals);
+};
+
+// New ad form
+
+const addAd = async (req, res) => {
+  const locals = {
+    title: "Skelbimukai",
+    description: "Management system",
+  };
+
+  res.render("addAd", locals);
+};
+
+// create new ad
+
+const postAd = async (req, res) => {
+  const newAd = new Ad({
+    text: req.body.text,
+    description: req.body.description,
+    price: req.body.price,
+    user: req.user.id,
+  });
+
+  try {
+    await Ad.create(newAd);
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   setAd,
   getAds,
   updateAd,
   deleteAd,
+  homepage,
+  addAd,
+  postAd,
 };

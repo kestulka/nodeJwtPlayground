@@ -12,9 +12,6 @@ app.use(express.json());
 app.use(cors());
 app.options("*", cors());
 app.use(express.urlencoded({ extended: false }));
-
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/ads", require("./routes/adRoutes"));
 app.use(errorHandler);
 
 // Static files
@@ -30,6 +27,7 @@ app.set("view engine", "ejs");
 // Routes
 
 app.use("/", require("./routes/userRoutes.js"));
+app.use("/", require("./routes/adRoutes.js"));
 
 // Handle 404
 app.get("*", (req, res) => {
