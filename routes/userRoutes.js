@@ -16,7 +16,17 @@ const protect = require("../middleware/auth");
 
 const protectAdmin = require("../middleware/adminAuth");
 
-router.post("/", registerUser);
+router.use(express.static('public'))
+router.get("/register", (req, res) => {
+  res.sendFile('register.html', {root: "public"})
+})
+router.get("/login", (req, res) => {
+  res.sendFile('login.html', {root: "public"})
+})
+
+
+
+router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/user", protect, getUser);
 router.get("/list", protectAdmin, getUsers);
